@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # 1. La Base de Datos
+  db:
+    image: postgres:15.3
+    container_name: theta_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: tgmf4
+      POSTGRES_DB: proyectocatedra
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # 2. El Backend en NestJS
+  backend:
+    build:
+      context: ./eventos-empresariales-backend 
+    container_name: theta_backend
+    restart: always
+    ports:
+      - '3000:3000'
+    environment:
+      - DB_HOST=db
+      - DB_USER=postgres
+      - DB_PASSWORD=tgmf4
+      - DB_NAME=proyectocatedra
+    depends_on:
+      - db
+
+  # 3. El Frontend en React
+  frontend:
+    build:
+      context: ./Arquitectura-y-Diseno-de-Software---Front-end 
+    container_name: theta_frontend
+    restart: always
+    ports:
+      - '8080:80' 
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
