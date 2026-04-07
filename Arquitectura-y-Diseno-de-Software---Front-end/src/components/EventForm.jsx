@@ -22,9 +22,9 @@ export const EventForm = () => {
         const fetchData = async () => {
             try {
                 const [resCat, resComp, resUser] = await Promise.all([
-                    fetch('http://localhost:3000/categorias'),
-                    fetch('http://localhost:3000/empresas'),
-                    fetch('http://localhost:3000/usuarios')
+                    fetch('/api/categorias'),
+                    fetch('/api/empresas'),
+                    fetch('/api/usuarios')
                 ]);
 
                 const [dataCat, dataComp, dataUser] = await Promise.all([
@@ -65,7 +65,7 @@ export const EventForm = () => {
         };
 
         try {
-            const res = await fetch('http://localhost:3000/eventos', {
+            const res = await fetch('/api/eventos', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),

@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API = "http://localhost:3000"
+const API = "/api"
 
 export const registerAttendance = async (data) => {
  const res = await axios.post(`${API}/registros`, data)

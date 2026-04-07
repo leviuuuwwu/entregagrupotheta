@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API = "http://localhost:3000"
+const API = "/api"
 
 export const getCompanies = async () => {
  const res = await axios.get(`${API}/empresas`)

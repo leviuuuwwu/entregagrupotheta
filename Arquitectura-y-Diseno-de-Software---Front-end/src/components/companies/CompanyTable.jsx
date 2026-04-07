@@ -6,7 +6,7 @@ export default function CompanyTable(){
 
   useEffect(()=>{
 
-    fetch("http://localhost:3000/empresas")
+    fetch("/api/empresas")
       .then(res => res.json())
       .then(data=>{
         console.log("empresas:",data)
