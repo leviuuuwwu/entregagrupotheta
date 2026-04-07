@@ -1,0 +1,76 @@
+# 🏢 Sistema de Gestión de Eventos Empresariales - Backend
+
+Este repositorio contiene el código fuente del backend para el Sistema de Gestión de Eventos Empresariales, desarrollado como parte de la materia de Arquitectura y Diseño de Software de la Escuela Superior de Economía y Negocios (ESEN).
+
+## 👥 Equipo de Desarrollo (Grupo Theta)
+* **Kathleen Argueta** - Desarrolladora Front-End
+* **Jade Cárcamo** - Desarrolladora Front-End
+* **Jorge Flores** - Desarrollador Back-End
+* **Jonathan Guerra** - Desarrollador Back-End
+* **Leví Guerra** - Coordinador con Exp. Profesional
+* **José Milán** - Desarrollador Back-End
+* **Diego Orellana** - Desarrollador Back-End
+
+## 🚀 Tecnologías Utilizadas
+* **Framework:** NestJS (Node.js / TypeScript) 
+* **Base de Datos:** PostgreSQL 
+* **ORM:** TypeORM
+* **Infraestructura:** Docker & Docker Compose 
+* **Arquitectura:** Clean Architecture (Separación por capas: Entidades, Casos de Uso, Controladores y Módulos)
+
+## ⚙️ Requisitos Previos
+Para correr este proyecto en tu entorno local, necesitas tener instalado:
+* [Node.js](https://nodejs.org/) (v18 o superior)
+* [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+## 🛠️ Instalación y Ejecución
+
+1. **Clonar el repositorio y descargar dependencias:**
+   git clone https://github.com/leviuuuwwu/Arquitectura-y-Dise-o-de-Software-BackEnd
+   cd a la carpeta del repositorio
+   npm install
+
+Levantar la Base de Datos con Docker:
+Asegúrate de tener Docker Desktop abierto y ejecuta:
+
+Powershell:
+docker-compose up -d
+Esto levantará un contenedor con PostgreSQL en el puerto 5432.
+
+Ejecutar el servidor en modo desarrollo:
+
+Powershell:
+npm run start:dev
+El servidor de NestJS iniciará en http://localhost:3000. Gracias a TypeORM (synchronize: true), las tablas se crearán automáticamente en la base de datos al arrancar.
+
+📌 Endpoints Principales (API REST)
+Actualmente, el sistema cuenta con los siguientes módulos base operativos con operaciones GET (Listar) y POST (Crear):
+
+http://localhost:3000/roles - Gestión de roles de usuario.
+
+http://localhost:3000/categorias - Gestión de categorías de eventos.
+
+http://localhost:3000/usuarios - Gestión de usuarios (Relacionado con Roles).
+
+http://localhost:3000/empresas - Gestión de empresas (Relacionado con Usuarios).
+
+http://localhost:3000/eventos - Gestión de eventos (Relacionado con Categorías, Usuarios y Empresas).
+
+http://localhost:3000/registros - Registro de asistencia (Relacionado con Usuarios y Eventos).
+
+🏗️ Estructura del Proyecto
+El proyecto sigue una estructura modular basada en Clean Architecture:
+
+src/
+ ├── modules/
+ │    ├── roles/
+ │    │    ├── controllers/   # Controladores REST
+ │    │    ├── entities/      # Modelos TypeORM de la DB
+ │    │    └── use-cases/     # Lógica de negocio y servicios
+ │    ├── categoria-evento/
+ │    ├── usuario/
+ │    ├── empresa/
+ │    ├── evento/
+ │    └── registro-asistencia/
+ ├── app.module.ts            # Módulo raíz y conexión a DB
+ └── main.ts                  # Punto de entrada de la aplicación
