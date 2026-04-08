@@ -14,6 +14,7 @@ import CompanyTable from "./components/companies/CompanyTable";
 import CheckInForm from "./components/attendance/CheckInForm";
 import { AuthLayout } from "./components/ui/AuthLayout";
 
+
 // Layout del dashboard: Sidebar fijo + Header + contenido dinámico
 function MainLayout() {
   return (
@@ -59,6 +60,7 @@ function App() {
             <Route path="/admin/users" element={<AdminUsersPage />} />
             <Route path="/empresas" element={<CompanyTable />} />
             <Route path="/asistentes" element={<CheckInForm />} />
+            <Route path="/eventos/nuevo" element={<EventForm />} />
           </Route>
         </Routes>
       </AuthProvider>

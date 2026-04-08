@@ -20,22 +20,20 @@ export const EventForm = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            const token = localStorage.getItem('imeet_token');
+            const headers = { 'Authorization': `Bearer ${token}` };
             try {
                 const [resCat, resComp, resUser] = await Promise.all([
-                    fetch('/api/categorias'),
-                    fetch('/api/empresas'),
-                    fetch('/api/usuarios')
+                    fetch('http://localhost:3000/categorias', { headers }),
+                    fetch('http://localhost:3000/empresas', { headers }),
+                    fetch('http://localhost:3000/usuarios', { headers })
                 ]);
-
                 const [dataCat, dataComp, dataUser] = await Promise.all([
-                    resCat.json(),
-                    resComp.json(),
-                    resUser.json()
+                    resCat.json(), resComp.json(), resUser.json()
                 ]);
-
-                setCategories(dataCat);
-                setCompanies(dataComp);
-                setUsers(dataUser);
+                setCategories(Array.isArray(dataCat) ? dataCat : []);
+                setCompanies(Array.isArray(dataComp) ? dataComp : []);
+                setUsers(Array.isArray(dataUser) ? dataUser : []);
             } catch (err) {
                 console.error("Error cargando datos maestros:", err);
             }
@@ -65,10 +63,13 @@ export const EventForm = () => {
         };
 
         try {
-            const res = await fetch('/api/eventos', {
+            const token = localStorage.getItem('imeet_token');
+            const res = await fetch('http://localhost:3000/eventos', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'Authorization': `Bearer ${token}` },
+                
             });
 
             if (res.ok) {

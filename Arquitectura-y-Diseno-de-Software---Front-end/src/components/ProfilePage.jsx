@@ -33,7 +33,7 @@ export function ProfilePage() {
     setSuccessMsg('');
 
     try {
-      const response = await fetch(`/api/usuarios/${user.id}`, {
+      const response = await fetch(`http://localhost:3000/usuarios/${user.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

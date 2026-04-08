@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react"
+import { getCompanies } from "../../api/companies"
 
 export default function CompanyTable(){
 
   const [empresas,setEmpresas] = useState([])
 
   useEffect(()=>{
-
-    fetch("/api/empresas")
-      .then(res => res.json())
-      .then(data=>{
-        console.log("empresas:",data)
-        setEmpresas(data)
+    getCompanies()
+      .then(data => {
+        console.log("empresas:", data)
+        setEmpresas(Array.isArray(data) ? data : [])
       })
       .catch(err => console.error(err))
-
   },[])
 
   return(
