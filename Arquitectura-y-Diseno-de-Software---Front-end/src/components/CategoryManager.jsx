@@ -7,7 +7,7 @@ export const CategoryManager = () => {
 
     const fetchCategories = async () => {
         try {
-            const res = await fetch('http://localhost:3000/categorias');
+            const res = await fetch('/api/categorias');
             if (!res.ok) throw new Error("Error en la respuesta del servidor");
             const data = await res.json();
             setCategories(data);
@@ -27,7 +27,7 @@ export const CategoryManager = () => {
         if (!newCategory.trim()) return;
 
         try {
-            const res = await fetch('http://localhost:3000/categorias', {
+            const res = await fetch('/api/categorias', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ category_name: newCategory }),

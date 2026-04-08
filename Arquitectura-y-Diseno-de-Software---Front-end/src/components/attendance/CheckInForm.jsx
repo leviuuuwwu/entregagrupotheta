@@ -6,7 +6,7 @@ export default function AttendanceList() {
   useEffect(() => {
     const token = localStorage.getItem('imeet_token');
 
-    fetch("http://localhost:3000/registros", {
+    fetch("/api/registros", {
       headers: {
         'Authorization': `Bearer ${token}` 
       }
