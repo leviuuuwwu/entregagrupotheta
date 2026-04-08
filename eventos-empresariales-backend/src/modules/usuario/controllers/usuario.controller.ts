@@ -3,47 +3,33 @@ import { UsuarioService } from '../use-cases/usuario.service';
 import { Usuario } from '../entities/usuario.entity';
 import { Public } from '../decorators/public.decorator';
 
-@Controller('usuarios') // endpoint: http://localhost:3000/usuarios
+@Controller('usuarios')
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
+
+  @Public()
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
+  async login(@Body() body: any) {
+    // Acepta tanto 'email' como 'user_email' para evitar errores del frontend
+    const email = body.user_email || body.email;
+    const password = body.user_password || body.password;
+
+    if (!email || !password) {
+      throw new UnauthorizedException('Faltan credenciales');
+    }
+
+    return this.usuarioService.login(email, password);
+  }
 
   @Get()
   findAll() {
     return this.usuarioService.findAll();
   }
 
-  @Public() // Este endpoint no requiere autenticación
+  @Public()
   @Post()
   create(@Body() usuario: Usuario) {
     return this.usuarioService.create(usuario);
-  }
-
-  @Public() // Este endpoint no requiere autenticación
-  // Endpoint de Login
-  @Post('login')
-  @HttpCode(HttpStatus.OK)
-  async login(@Body() body: any) {
-    const user = await this.usuarioService.login(body.user_email, body.user_password);
-    
-    if (!user) {
-      throw new UnauthorizedException('Correo o contraseña incorrectos');
-    }
-    
-    return user;
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usuarioService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateData: Partial<Usuario>) {
-    return this.usuarioService.update(id, updateData);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usuarioService.remove(id);
   }
 }

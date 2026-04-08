@@ -26,7 +26,7 @@ export function LoginPage() {
     setError('');
 
     try {
-      const response = await fetch('/api/usuarios/login', {
+      const response = await fetch('http://localhost:3000/usuarios/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
