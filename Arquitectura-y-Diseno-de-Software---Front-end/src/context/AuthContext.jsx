@@ -47,8 +47,8 @@ export function AuthProvider({ children }) {
     return user.role === role;
   }, [user]);
 
-  const isAdmin = useCallback(() => hasRole('admin'), [hasRole]);
-  const isOrganizer = useCallback(() => hasRole('organizer') || hasRole('admin'), [hasRole]);
+  const isAdmin = useCallback(() => hasRole('Administrador'), [hasRole]);
+  const isOrganizer = useCallback(() => hasRole('Organizador') || hasRole('Administrador'), [hasRole]);
 
   const value = {
     user,

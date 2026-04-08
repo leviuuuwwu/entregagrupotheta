@@ -38,6 +38,7 @@ export class UsuarioService {
       return {
         user_id: user.user_id,
         user_name: user.user_name,
+        role: user.role.role_name,
         access_token: await this.jwtService.signAsync(payload),
       };
     }
