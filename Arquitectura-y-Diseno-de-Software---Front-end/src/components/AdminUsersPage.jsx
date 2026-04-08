@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 
-const ROLES = ['admin', 'organizer', 'attendee'];
-const ROLE_LABELS = { admin: 'Admin', organizer: 'Organizador', attendee: 'Asistente' };
-const ROLE_ID = { admin: 1, organizer: 2, attendee: 3 };
+const ROLES = ['Administrador', 'Organizador', 'Attendee'];
+const ROLE_LABELS = { Administrador: 'Admin', Organizador: 'Organizador', Attendee: 'Asistente' };
+const ROLE_ID = { Administrador: 1, Organizador: 2, Attendee: 3 };
 const STATUS_BADGE = {
   active: 'bg-green-100 text-green-800',
   pending: 'bg-yellow-100 text-yellow-800',
@@ -31,7 +31,7 @@ export function AdminUsersPage() {
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('/api/usuarios', {
+      const res = await fetch('http://localhost:3000/usuarios', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -58,7 +58,7 @@ export function AdminUsersPage() {
 
   const handleDelete = async (userId) => {
     try {
-      const response = await fetch(`/api/usuarios/${userId}`, {
+      const response = await fetch(`http://localhost:3000/usuarios/${userId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -86,7 +86,7 @@ export function AdminUsersPage() {
   const stats = {
     total: users.length,
     active: users.filter((u) => u.status === 'active').length,
-    organizers: users.filter((u) => u.role === 'organizer').length,
+    organizers: users.filter((u) => u.role === 'Organizador').length,
     newToday: 0,
   };
 
@@ -323,7 +323,7 @@ function CreateUserForm({ token, onSuccess, onCancel }) {
     setIsLoading(true);
     setError('');
     try {
-      const response = await fetch('/api/usuarios', {
+      const response = await fetch('http://localhost:3000/usuarios', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -9,7 +9,7 @@ export const Sidebar = () => {
     // Podemos ocultar opciones del menú según el rol (ej. solo admins ven usuarios)
     const items = [
         { nombre: 'Panel de Control', icono: 'dashboard', link: "/dashboard" },
-        { nombre: 'Eventos', icono: 'calendar_today', link: "/eventos" },
+        { nombre: 'Eventos', icono: 'calendar_today', link: "/dashboard" },
         { nombre: 'Empresas', icono: 'corporate_fare', link: "/empresas" },
         { nombre: 'Asistentes', icono: 'groups', link: "/asistentes" },
         // Si no es admin, no ve la opción de Usuarios
