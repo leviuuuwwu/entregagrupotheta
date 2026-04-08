@@ -2,16 +2,11 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 
 const AuthContext = createContext(null);
 
-/**
- * AuthProvider: Maneja el token JWT y el estado global del usuario.
- * Wrap toda la app con este provider en main.jsx.
- */
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(() => localStorage.getItem('imeet_token'));
   const [isLoading, setIsLoading] = useState(true);
 
-  // Al montar, verificar si hay token guardado y restaurar sesión
   useEffect(() => {
     const storedToken = localStorage.getItem('imeet_token');
     const storedUser = localStorage.getItem('imeet_user');
@@ -20,7 +15,6 @@ export function AuthProvider({ children }) {
         setToken(storedToken);
         setUser(JSON.parse(storedUser));
       } catch {
-        // Token o usuario corrupto, limpiar
         localStorage.removeItem('imeet_token');
         localStorage.removeItem('imeet_user');
       }
@@ -47,8 +41,9 @@ export function AuthProvider({ children }) {
     return user.role === role;
   }, [user]);
 
-  const isAdmin = useCallback(() => hasRole('Administrador'), [hasRole]);
-  const isOrganizer = useCallback(() => hasRole('Organizador') || hasRole('Administrador'), [hasRole]);
+  // 👇 AQUÍ ESTABA EL BUG: Cambiado de 'Administrador' a 'admin'
+  const isAdmin = useCallback(() => hasRole('admin'), [hasRole]);
+  const isOrganizer = useCallback(() => hasRole('organizer') || hasRole('admin'), [hasRole]);
 
   const value = {
     user,
@@ -65,7 +60,6 @@ export function AuthProvider({ children }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-// Hook personalizado para consumir el contexto
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {

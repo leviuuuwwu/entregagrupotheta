@@ -36,19 +36,29 @@ export function LoginPage() {
       });
 
       const data = await response.json();
+      
+      console.log("Respuesta del Backend:", data); 
 
       if (!response.ok) {
         throw new Error(data.message || 'Credenciales inválidas');
       }
 
+      const token = data.access_token;
+      const payloadBase64 = token.split('.')[1]; 
+      const decodedPayload = JSON.parse(atob(payloadBase64)); 
+      
+      console.log("Lo que esconde el Token:", decodedPayload);
+
+      const rolReal = decodedPayload.role || 'attendee';
+
       const userData = {
-        id: data.user_id,
+        id: data.user_id, // o decodedPayload.sub
         name: data.user_name,
         email: formData.email,
-        role: data.role || 'attendee',
+        role: rolReal, 
       };
 
-      login(userData, data.access_token);
+      login(userData, token);
       navigate(from, { replace: true });
 
     } catch (err) {

@@ -3,21 +3,17 @@ import { Link } from "react-router-dom";
 import { useAuth } from '../../context/AuthContext';
 
 export const Sidebar = () => {
-    //  Sacamos al usuario logueado
     const { user } = useAuth();
 
-    // Podemos ocultar opciones del menú según el rol (ej. solo admins ven usuarios)
     const items = [
         { nombre: 'Panel de Control', icono: 'dashboard', link: "/dashboard" },
         { nombre: 'Eventos', icono: 'calendar_today', link: "/dashboard" },
         { nombre: 'Empresas', icono: 'corporate_fare', link: "/empresas" },
         { nombre: 'Asistentes', icono: 'groups', link: "/asistentes" },
-        // Si no es admin, no ve la opción de Usuarios
-        ...(user?.role === 'Administrador' ? [{ nombre: 'Usuarios', icono: 'manage_accounts', link: "/admin/users" }] : []),
+        ...(user?.role === 'admin' ? [{ nombre: 'Usuarios', icono: 'manage_accounts', link: "/admin/users" }] : []),
         { nombre: 'Mi Perfil', icono: 'person', link: "/profile" },
     ];
 
-    // Calculamos iniciales y rol para mostrar
     const iniciales = user?.name ? user.name.substring(0, 2).toUpperCase() : 'U';
     const rolMostrar = user?.role === 'admin' ? 'Administrador' : user?.role === 'organizer' ? 'Organizador' : 'Asistente';
 
