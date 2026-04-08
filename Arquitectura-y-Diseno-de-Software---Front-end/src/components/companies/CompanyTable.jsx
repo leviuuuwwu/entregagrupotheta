@@ -6,22 +6,12 @@ export default function CompanyTable(){
   const [empresas,setEmpresas] = useState([])
 
   useEffect(()=>{
-<<<<<<< HEAD
     getCompanies()
       .then(data => {
         console.log("empresas:", data)
         setEmpresas(Array.isArray(data) ? data : [])
-=======
-
-    fetch("/api/empresas")
-      .then(res => res.json())
-      .then(data=>{
-        console.log("empresas:",data)
-        setEmpresas(data)
->>>>>>> 2e3e3d733f119badd29cd5cb2d4274f54c5617dc
       })
       .catch(err => console.error(err))
-
   },[])
 
   return(

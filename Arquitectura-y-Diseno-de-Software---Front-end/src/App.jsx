@@ -61,7 +61,6 @@ function App() {
             <Route path="/empresas" element={<CompanyTable />} />
             <Route path="/asistentes" element={<CheckInForm />} />
             <Route path="/eventos/nuevo" element={<EventForm />} />
-            <Route path="/categorias" element={<CategoryManager />} />
           </Route>
         </Routes>
       </AuthProvider>
