@@ -16,7 +16,7 @@ import { JwtGuard } from './modules/usuario/guards/jwt.guard';
       host: process.env.DB_HOST || 'localhost', 
       port: 5432,
       username: process.env.DB_USER || 'postgres',
-      password: process.env.DB_PASSWORD || 'suser',
+      password: process.env.DB_PASSWORD || 'tgmf4',
       database: process.env.DB_NAME || 'proyectocatedra',
       autoLoadEntities: true,
       synchronize: true,
