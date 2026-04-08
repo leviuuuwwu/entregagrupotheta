@@ -23,7 +23,7 @@ function MainLayout() {
       <div className="flex-1 flex flex-col">
         <Header />
         <main className="flex-1 overflow-y-auto p-8">
-          <Outlet /> {}
+          <Outlet /> { }
         </main>
       </div>
     </div>
@@ -61,6 +61,8 @@ function App() {
             <Route path="/empresas" element={<CompanyTable />} />
             <Route path="/asistentes" element={<CheckInForm />} />
             <Route path="/eventos/nuevo" element={<EventForm />} />
+            <Route path="/categorias" element={<CategoryManager />} />
+            <Route path="/empresas/nueva" element={<CompanyTable />} />
           </Route>
         </Routes>
       </AuthProvider>

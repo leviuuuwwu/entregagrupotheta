@@ -12,7 +12,7 @@ export const EventCatalog = () => {
     useEffect(() => {
         const token = localStorage.getItem('imeet_token');
 
-        fetch('/api/eventos', {
+        fetch('http://localhost:3000/eventos', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

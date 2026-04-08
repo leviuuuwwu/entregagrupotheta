@@ -13,7 +13,10 @@ export const Sidebar = () => {
         { nombre: 'Empresas', icono: 'corporate_fare', link: "/empresas" },
         { nombre: 'Asistentes', icono: 'groups', link: "/asistentes" },
         // Si no es admin, no ve la opción de Usuarios
-        ...(user?.role === 'Administrador' ? [{ nombre: 'Usuarios', icono: 'manage_accounts', link: "/admin/users" }] : []),
+        ...(user?.role === 'Administrador' ? [
+            { nombre: 'Usuarios', icono: 'manage_accounts', link: "/admin/users" },
+            { nombre: 'Categorías', icono: 'category', link: "/categorias" }
+        ] : []),
         { nombre: 'Mi Perfil', icono: 'person', link: "/profile" },
     ];
 
