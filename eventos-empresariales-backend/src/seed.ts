@@ -8,6 +8,7 @@ import { Evento } from './modules/evento/entities/evento.entity';
 import { CategoriaEvento } from './modules/categoria-evento/entities/categoria-evento.entity';
 import { Role } from './modules/roles/entities/role.entity';
 import { RegistroAsistencia } from './modules/registro-asistencia/entitites/registro-asistencia.entity';
+import * as bcrypt from 'bcrypt'; // 👇 IMPORTAMOS BCRYPT
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
@@ -20,12 +21,11 @@ async function bootstrap() {
   const roleRepo = app.get(getRepositoryToken(Role));
   const registroRepo = app.get(getRepositoryToken(RegistroAsistencia));
 
-
-  // Poblar roles
+  // Poblar roles (Nombres en minúscula para que React los entienda)
   const roles = await roleRepo.save([
-    { role_name: 'Admin', role_description: 'Administrador del sistema', role_tasks: 'Gestión total' },
-    { role_name: 'Organizador', role_description: 'Organiza eventos', role_tasks: 'Gestión de eventos' },
-    { role_name: 'Invitado', role_description: 'Participa en eventos', role_tasks: 'Asistencia' },
+    { role_name: 'admin', description: 'Administrador del sistema' },
+    { role_name: 'organizer', description: 'Organiza eventos' },
+    { role_name: 'attendee', description: 'Participa en eventos' },
   ]);
 
   // Poblar categorías
@@ -35,11 +35,15 @@ async function bootstrap() {
     { category_name: 'Networking', category_description: 'Espacios para networking' },
   ]);
 
-  // Poblar usuarios
+  // 👇 ENCRIPTAMOS LA CONTRASEÑA ANTES DE GUARDARLA
+  const salt = await bcrypt.genSalt(10);
+  const passwordEncriptada = await bcrypt.hash('123456', salt);
+
+  // Poblar usuarios (A todos les pondrá '123456' pero encriptada)
   const usuarios = await usuarioRepo.save([
-    { user_name: 'Juan Pérez', user_email: 'juan@a.com', user_password: '123456', role: roles[0] },
-    { user_name: 'Ana López', user_email: 'ana@b.com', user_password: '123456', role: roles[1] },
-    { user_name: 'Luis Gómez', user_email: 'luis@c.com', user_password: '123456', role: roles[2] },
+    { user_name: 'Juan Pérez (Admin)', user_email: 'juan@a.com', user_password: passwordEncriptada, role: roles[0] },
+    { user_name: 'Ana López (Org)', user_email: 'ana@b.com', user_password: passwordEncriptada, role: roles[1] },
+    { user_name: 'Luis Gómez (Att)', user_email: 'luis@c.com', user_password: passwordEncriptada, role: roles[2] },
   ]);
 
   // Poblar empresas
@@ -93,6 +97,7 @@ async function bootstrap() {
     { user: usuarios[2], event: eventos[2], state: 'ausente' },
   ]);
 
+  console.log('✅ Base de datos poblada con éxito!');
   await app.close();
 }
 

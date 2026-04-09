@@ -17,9 +17,9 @@ export class RolesService implements OnModuleInit {
       console.log('🌱 Sembrando roles por defecto en la base de datos...');
       
       await this.rolesRepository.save([
-        { role_name: 'Administrador', description: 'Control total del sistema' },
-        { role_name: 'Organizador', description: 'Crea y gestiona eventos' },
-        { role_name: 'Attendee', description: 'Asistente a los eventos' },
+        { role_name: 'admin', description: 'Control total del sistema' },
+        { role_name: 'organizer', description: 'Crea y gestiona eventos' },
+        { role_name: 'attendee', description: 'Asistente a los eventos' },
       ]);
       
       console.log('✅ Roles creados exitosamente.');

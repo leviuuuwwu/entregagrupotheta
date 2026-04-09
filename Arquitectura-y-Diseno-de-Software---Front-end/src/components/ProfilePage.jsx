@@ -18,7 +18,7 @@ export function ProfilePage() {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    window.location.href = '/login';
   };
 
   const handleChange = (e) => {
