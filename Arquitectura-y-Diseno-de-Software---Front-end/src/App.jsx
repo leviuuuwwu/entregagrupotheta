@@ -14,7 +14,6 @@ import CompanyTable from "./components/companies/CompanyTable";
 import CheckInForm from "./components/attendance/CheckInForm";
 import { AuthLayout } from "./components/ui/AuthLayout";
 
-
 // Layout del dashboard: Sidebar fijo + Header + contenido dinámico
 function MainLayout() {
   return (

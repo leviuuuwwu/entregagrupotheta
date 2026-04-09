@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import { Button } from './ui/Button';
 
 export const EventForm = () => {
+    const navigate = useNavigate(); 
     const [categories, setCategories] = useState([]);
     const [companies, setCompanies] = useState([]);
     const [users, setUsers] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const [formData, setFormData] = useState({
         event_name: '',
@@ -12,7 +15,7 @@ export const EventForm = () => {
         start_date: '',
         end_date: '',
         location: '',
-        max_attendanse: '', // Mantenemos la "s" por el error que se nos fue en la BD
+        max_attendanse: '', // Mantenemos la "s" por la BD
         category_id: '',
         company_id: '',
         organizer_id: ''
@@ -28,12 +31,11 @@ export const EventForm = () => {
                     fetch('http://localhost:3000/empresas', { headers }),
                     fetch('http://localhost:3000/usuarios', { headers })
                 ]);
-                const [dataCat, dataComp, dataUser] = await Promise.all([
-                    resCat.json(), resComp.json(), resUser.json()
-                ]);
-                setCategories(Array.isArray(dataCat) ? dataCat : []);
-                setCompanies(Array.isArray(dataComp) ? dataComp : []);
-                setUsers(Array.isArray(dataUser) ? dataUser : []);
+                
+
+                if(resCat.ok) setCategories(await resCat.json());
+                if(resComp.ok) setCompanies(await resComp.json());
+                if(resUser.ok) setUsers(await resUser.json());
             } catch (err) {
                 console.error("Error cargando datos maestros:", err);
             }
@@ -48,18 +50,18 @@ export const EventForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
-        // Estructura del payload 
         const payload = {
             event_name: formData.event_name,
             description: formData.description,
             start_date: new Date(formData.start_date).toISOString(),
             end_date: new Date(formData.end_date).toISOString(),
             location: formData.location,
-            max_attendanse: parseInt(formData.max_attendanse),
-            category: { category_id: parseInt(formData.category_id) },
-            organizer: { user_id: formData.organizer_id },
-            company: { company_id: formData.company_id }
+            max_attendanse: parseInt(formData.max_attendanse) || 0,
+            category: { category_id: formData.category_id },
+            company: { company_id: formData.company_id },
+            organizer: { user_id: formData.organizer_id } 
         };
 
         try {
@@ -68,18 +70,23 @@ export const EventForm = () => {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json', 
-                    'Authorization': `Bearer ${token}` },
-                
+                    'Authorization': `Bearer ${token}` 
+                },
+                body: JSON.stringify(payload)
             });
 
             if (res.ok) {
                 alert("¡iMeet! registró el evento con éxito!");
+                navigate('/dashboard'); // 👈 Regresamos al catálogo
             } else {
                 const error = await res.json();
-                alert(`Error: ${error.message}`);
+                console.error("Detalle del error DB:", error);
+                alert(`Error al guardar: Revisa que todos los campos estén llenos.`);
             }
         } catch (err) {
             console.error("Fallo de conexión:", err);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -116,7 +123,9 @@ export const EventForm = () => {
                             <select name="category_id" value={formData.category_id} onChange={handleChange} className={inputClass} required>
                                 <option value="">Seleccione categoría...</option>
                                 {categories.map(c => (
-                                    <option key={c.category_id} value={c.category_id}>{c.category_name}</option>
+                                    <option key={c.category_id || c.id} value={c.category_id || c.id}>
+                                        {c.category_name || c.nombre}
+                                    </option>
                                 ))}
                             </select>
                         </div>
@@ -126,7 +135,9 @@ export const EventForm = () => {
                             <select name="company_id" value={formData.company_id} onChange={handleChange} className={inputClass} required>
                                 <option value="">Seleccione empresa...</option>
                                 {companies.map(c => (
-                                    <option key={c.company_id} value={c.company_id}>{c.company_name}</option>
+                                    <option key={c.company_id || c.id} value={c.company_id || c.id}>
+                                        {c.company_name || c.nombre}
+                                    </option>
                                 ))}
                             </select>
                         </div>
@@ -153,9 +164,8 @@ export const EventForm = () => {
                             <select name="organizer_id" value={formData.organizer_id} onChange={handleChange} className={inputClass} required>
                                 <option value="">Asignar un usuario responsable...</option>
                                 {users.map(u => (
-                                    <option key={u.user_id} value={u.user_id}>
-                                        {/* USAMOS user_name PORQUE ASÍ ESTÁ EN LA ENTIDAD DEL BACKEND */}
-                                        {u.user_name}
+                                    <option key={u.user_id || u.id} value={u.user_id || u.id}>
+                                        {u.user_name || u.nombre}
                                     </option>
                                 ))}
                             </select>
@@ -175,8 +185,10 @@ export const EventForm = () => {
                 </section>
 
                 <footer className="pt-8 border-t border-slate-50 flex justify-end gap-4">
-                    <Button variant="secondary" type="button" onClick={() => window.location.reload()}>Descartar</Button>
-                    <Button type="submit">Publicar en iMeet!</Button>
+                    <Button variant="secondary" type="button" onClick={() => navigate('/dashboard')}>Descartar</Button>
+                    <Button type="submit" disabled={isLoading}>
+                        {isLoading ? 'Publicando...' : 'Publicar en iMeet!'}
+                    </Button>
                 </footer>
             </form>
         </div>
